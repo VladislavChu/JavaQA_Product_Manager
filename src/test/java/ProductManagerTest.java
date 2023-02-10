@@ -1,5 +1,4 @@
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class ProductManagerTest {
@@ -13,18 +12,16 @@ public class ProductManagerTest {
     Product item5 = new Product(5, "Что-то непонятное", 1_000);
     Product item6 = new Product(6, "Javi с говядиной", 75);
 
-    @BeforeEach
-    public void setup() {
+
+    @Test
+    public void shouldSearchSomeItemsByText() {
         manager.add(item1);
         manager.add(item2);
         manager.add(item3);
         manager.add(item4);
         manager.add(item5);
         manager.add(item6);
-    }
 
-    @Test
-    public void shouldSearchSomeItemsByText() {
         Product[] expected = {item3, item4};
         Product[] actual = manager.searchBy("Сахар");
 
@@ -33,12 +30,35 @@ public class ProductManagerTest {
 
     @Test
     public void shouldSearchItemsByText() {
+        manager.add(item1);
+        manager.add(item2);
+        manager.add(item3);
+        manager.add(item4);
+        manager.add(item5);
+        manager.add(item6);
+
         Product[] expected = {item2};
         Product[] actual = manager.searchBy("VladiIzKastbl");
 
         Assertions.assertArrayEquals(expected, actual);
     }
 
+    @Test
+    public void searchItemsByTextIfNoAdd() {
 
+        Product[] expected = {};
+        Product[] actual = manager.searchBy("Сахар");
 
+        Assertions.assertArrayEquals(expected, actual);
+    }
+
+    @Test
+    public void searchItemsByTextIfOneAdd() {
+        manager.add(item1);
+
+        Product[] expected = {item1};
+        Product[] actual = manager.searchBy("На фронте Бес перемен");
+
+        Assertions.assertArrayEquals(expected, actual);
+    }
 }
