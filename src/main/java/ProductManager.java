@@ -13,27 +13,18 @@ public class ProductManager {
         Product[] result = new Product[0]; // тут будем хранить подошедшие запросу продукты
         for (Product product: repo.getItems()) {
             if (matches(product, text)) {
-                result = addProductToArray(result, product);
+                Product[] tmp = new Product[result.length + 1];
+                for (int i = 0; i < result.length; i++) {
+                    tmp[i] = result[i];
+                }
+                tmp[tmp.length - 1] = product;
+                result = tmp;
             }
         }
         return result;
     }
 
-    private Product[] addProductToArray(Product[] items, Product item) {
-        Product[] tmp = new Product[items.length + 1];
-        for (int i = 0; i < items.length; i++) {
-            tmp[i] = items[i];
-        }
-        tmp[tmp.length - 1] = item;
-        return tmp;
-    }
-
     public boolean matches(Product product, String search) {
-        if (product.getName().contains(search)) {
-            return true;
-        } else {
-            return false;
-        }
+        return (product.getName().contains(search));
     }
-
 }
