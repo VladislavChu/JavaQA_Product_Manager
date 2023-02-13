@@ -9,16 +9,29 @@ public class ProductRepository {
         items = tmp;
     }
 
-    public void removeById(int id) {
+    public void removeById(int removeId) {
+        Product foundProduct = findById(removeId);
+        if (foundProduct == null) {
+            throw new NotFoundException(removeId);
+        }
         Product[] tmp = new Product[items.length - 1];
         int copyToIndex = 0;
         for (Product item : items) {
-            if (item.getId() != id) {
+            if (item.getId() != removeId) {
                 tmp[copyToIndex] = item;
                 copyToIndex++;
             }
         }
         items = tmp;
+    }
+
+    private Product findById(int id) {
+        for (Product item : items) {
+            if (item.getId() == id) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public Product[] getItems() {

@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 public class ProductRepositoryTest {
     Product item1 = new Book(1, "На фронте Бес перемен", 210, "Центр принятия решений");
@@ -44,5 +46,37 @@ public class ProductRepositoryTest {
         Assertions.assertArrayEquals(expected, actual);
     }
 
+    @Test
+    public void shouldRemoveByIdIfItNegative() {
+        ProductRepository repo = new ProductRepository();
+        repo.save(item1);
+        repo.save(item2);
+        repo.save(item3);
 
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            repo.removeById(-1);
+        });
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+           "-1",
+            "-100",
+            "-10",
+            "-2",
+            "6",
+            "7",
+            "50",
+            "150",
+    })
+    public void shouldRemoveByIdIfItNegativeOrAboveLength(int removeId) {
+        ProductRepository repo = new ProductRepository();
+        repo.save(item1);
+        repo.save(item2);
+        repo.save(item3);
+
+        Assertions.assertThrows(NotFoundException.class, () -> {
+            repo.removeById(removeId);
+        });
+    }
 }
